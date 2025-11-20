@@ -1,0 +1,71 @@
+package mk.ukim.finki.wp.lab1.web;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import mk.ukim.finki.wp.lab1.model.Chef;
+import mk.ukim.finki.wp.lab1.service.ChefService;
+import mk.ukim.finki.wp.lab1.service.DishService;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.web.IWebExchange;
+import org.thymeleaf.web.servlet.JakartaServletWebApplication;
+
+import java.io.IOException;
+
+@WebServlet(name = "DishServlet", urlPatterns = "/dish")
+public class DishServlet extends HttpServlet {
+    private final SpringTemplateEngine templateEngine;
+    private final DishService dishService;
+    private final ChefService chefService;
+
+    public DishServlet(SpringTemplateEngine templateEngine, DishService dishService, ChefService chefService) {
+        this.templateEngine = templateEngine;
+        this.dishService = dishService;
+        this.chefService = chefService;
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        IWebExchange webExchange = JakartaServletWebApplication
+                .buildApplication(getServletContext())
+                .buildExchange(request, response);
+
+        long chefId = -1L;
+
+        try {
+            // Attempt to parse chefId from the request parameter
+            chefId = Long.parseLong(request.getParameter("chefId"));
+        } catch(Exception e) {
+            // Log error, and crucially, redirect if parsing fails
+            System.out.println(e.getMessage());
+            response.sendRedirect("/listChefs?error=invalidChefId");
+            return; // Stop execution
+        }
+
+        Chef chef = chefService.findById(chefId);
+
+        // 🔥 FIX: Add Null Check for Chef 🔥
+        if (chef == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Chef with ID " + chefId + " not found.");
+            // Alternatively: response.sendRedirect("/listChefs?error=chefNotFound");
+            return; // Stop execution
+        }
+
+        // Accessing chef properties is now safe
+        WebContext context = new WebContext(webExchange);
+        context.setVariable("dishes", dishService.listDishes());
+        context.setVariable("chefId", chefId);
+        context.setVariable("chefName", chef.getFirstName() + " " + chef.getLastName());
+
+        templateEngine.process("dishesList.html", context, response.getWriter());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String chefId = request.getParameter("chefId");
+        response.sendRedirect("/dish?chefId=" + chefId);
+    }
+}
