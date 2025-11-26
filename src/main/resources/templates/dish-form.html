@@ -39,8 +39,7 @@
 <h1 th:text="${(dish != null) ? 'Edit dish' : 'Add a new dish'}"></h1>
 
 <form th:method="POST"
-      th:action="@{${(dish != null) ? '/dishes/edit/' + dish.id : '/dishes/add'}}">
-
+      th:action="@{${(dish != null && dish.id != null) ? '/dishes/edit/' + dish.id : '/dishes/add'}}">
   <label for="dishId">Dish ID:</label>
   <input type="text" id="dishId" name="dishId" th:value="${(dish != null) ? dish.dishId : ''}" required>
 
