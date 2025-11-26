@@ -2,15 +2,24 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Restaurant Chefs - Welcome to Our Restaurant</title>
-    <style type="text/css">
+    <title>Restaurant Chefs</title>
+    <style>
         body {
-            width: 800px;
-            margin: auto;
             font-family: Arial, sans-serif;
+            padding: 20px;
         }
-        h1 {
-            color: #333;
+        div {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input{
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -20,17 +29,16 @@
 </header>
 <main>
     <h2>Choose a chef:</h2>
-    <form action="/dish" method="POST">
+    <form action="/dishes/select" method="GET">
         <div th:each="chef : ${chefs}">
             <label>
-                <input type="radio" name="chefId" th:value="${chef.id}"/>
+                <input type="radio" name="chefId" th:value="${chef.id}" required/>
                 <span th:text="${chef.firstName} + ' ' + ${chef.lastName} + ', Bio: ' + ${chef.bio}"></span>
             </label>
             <br/>
         </div>
         <input type="submit" value="Submit">
     </form>
-
 </main>
 </body>
 </html>

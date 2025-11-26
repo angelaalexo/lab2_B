@@ -1,36 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>Add Dish to Chef</title>
-    <style type="text/css">
+    <title>Select Dish to Chef</title>
+    <style>
         body {
-            width: 800px;
-            margin: auto;
             font-family: Arial, sans-serif;
+            padding: 20px;
         }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
+        div {
+            display: block;
+            margin-bottom: 5px;
         }
-        table, td, th {
-            border: 1px solid black;
-            padding: 10px;
-        }
-        th {
+        input{
+            padding: 10px 15px;
             background-color: #4CAF50;
             color: white;
-        }
-        section {
-            float: left;
-            margin: 0 1.5%;
-            width: 63%;
-        }
-        aside {
-            float: right;
-            margin: 0 1.5%;
-            width: 30%;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -40,10 +29,17 @@
 </header>
 <section>
     <h2>Select dish:</h2>
-    <form action="/chefDetails" method="POST">
+    <form action="/dishes/select" method="POST">
         <input type="hidden" name="chefId" th:value="${chefId}">
-        <input th:each="dish : ${dishes}" type="radio" name="dishId" th:value="${dish.getDishId()}" style="white-space: pre"
-               th:utext="${dish.getName()} + '<br />'"/>
+
+        <div th:each="dish : ${dishes}">
+            <label>
+                <input type="radio" name="dishId" th:value="${dish.dishId}" required/>
+                <span th:text="${dish.name} + ' (' + ${dish.cuisine} + ')'">Dish Name (Cuisine)</span>
+            </label>
+            <br/>
+        </div>
+
         <br/>
         <input type="submit" value="Add dish">
     </form>
@@ -51,12 +47,8 @@
 <aside>
     <table>
         <tr>
-            <td><b>Chef ID</b></td>
-            <td th:text="${chefId}"><!-- Display selected chefId --></td>
-        </tr>
-        <tr>
             <td><b>Chef Name</b></td>
-            <td th:text="${chefName}"><!-- Display chef name --></td>
+            <td th:text="${chefName}"></td>
         </tr>
     </table>
 </aside>

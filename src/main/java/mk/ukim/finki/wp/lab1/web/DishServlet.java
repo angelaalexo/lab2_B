@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.lab1.web;
+/*package mk.ukim.finki.wp.lab1.web;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -36,7 +36,6 @@ public class DishServlet extends HttpServlet {
         long chefId = -1L;
 
         try {
-            // Attempt to parse chefId from the request parameter
             chefId = Long.parseLong(request.getParameter("chefId"));
         } catch(Exception e) {
             // Log error, and crucially, redirect if parsing fails
@@ -47,14 +46,12 @@ public class DishServlet extends HttpServlet {
 
         Chef chef = chefService.findById(chefId);
 
-        // 🔥 FIX: Add Null Check for Chef 🔥
         if (chef == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Chef with ID " + chefId + " not found.");
             // Alternatively: response.sendRedirect("/listChefs?error=chefNotFound");
             return; // Stop execution
         }
 
-        // Accessing chef properties is now safe
         WebContext context = new WebContext(webExchange);
         context.setVariable("dishes", dishService.listDishes());
         context.setVariable("chefId", chefId);
@@ -68,4 +65,4 @@ public class DishServlet extends HttpServlet {
         String chefId = request.getParameter("chefId");
         response.sendRedirect("/dish?chefId=" + chefId);
     }
-}
+} */

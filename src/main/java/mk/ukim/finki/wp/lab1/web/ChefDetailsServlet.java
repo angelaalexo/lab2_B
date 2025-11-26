@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.lab1.web;
+/* package mk.ukim.finki.wp.lab1.web;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -46,14 +46,12 @@ public class ChefDetailsServlet extends HttpServlet {
 
         Chef chef = chefService.findById(chefId);
 
-        // FIX: Check if the chef was found (i.e., not null)
         if (chef == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Chef with ID " + chefId + " not found.");
             // Alternatively, redirect: response.sendRedirect("/listChefs?error=chefNotFound");
             return; // Stop processing the request
         }
 
-        // This block is now safe because chef is guaranteed not to be null
         WebContext context = new WebContext(webExchange);
         context.setVariable("chefName", chef.getFirstName() + " " + chef.getLastName());
         context.setVariable("chefBio", chef.getBio());
@@ -75,7 +73,6 @@ public class ChefDetailsServlet extends HttpServlet {
         }
         String dishId = request.getParameter("dishId");
 
-        // 2. ADD NULL CHECK FOR DISH
         Dish dish = dishService.findByDishId(dishId);
         if (dish == null) {
             // Handle case where dishId is invalid or not found
@@ -83,10 +80,8 @@ public class ChefDetailsServlet extends HttpServlet {
             return;
         }
 
-        // Call is now safe
         Chef chef = chefService.addDishToChef(chefId, dish.getDishId());
 
-        // 3. (Optional but Recommended) ADD NULL CHECK for chef from service call
         if (chef == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Chef not found after update.");
             return;
@@ -94,4 +89,4 @@ public class ChefDetailsServlet extends HttpServlet {
 
         response.sendRedirect("/chefDetails?chefId=" + chef.getId());
     }
-}
+} */

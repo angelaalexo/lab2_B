@@ -1,0 +1,122 @@
+package mk.ukim.finki.wp.lab1.web.controller;
+
+import mk.ukim.finki.wp.lab1.model.Chef;
+import mk.ukim.finki.wp.lab1.model.Dish;
+import mk.ukim.finki.wp.lab1.service.ChefService;
+import mk.ukim.finki.wp.lab1.service.DishService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/dishes") // <--- База на патеката е /dishes
+public class DishController {
+
+    private final DishService dishService;
+    private final ChefService chefService;
+
+    public DishController(DishService dishService, ChefService chefService) {
+        this.dishService = dishService;
+        this.chefService = chefService;
+    }
+
+    // 4.1 Метод за листање на јадења
+    @GetMapping
+    public String getDishesPage(@RequestParam(required = false) String error, Model model) {
+        if (error != null && !error.isEmpty()) {
+            model.addAttribute("hasError", true);
+            model.addAttribute("error", error);
+        }
+
+        List<Dish> dishes = this.dishService.listDishes();
+        model.addAttribute("dishes", dishes);
+
+        return "listDishes";
+    }
+
+    // 7.2 Метод за прикажување на празна форма (Додавање)
+    @GetMapping("/dish-form")
+    public String getAddDishPage(Model model) {
+        model.addAttribute("dish", new Dish());
+        return "dish-form";
+    }
+
+    // 7.1 Метод за прикажување на форма со податоци (Уредување)
+    @GetMapping("/dish-form/{id}")
+    public String getEditDishForm(@PathVariable Long id, Model model) {
+        Dish dish = dishService.findById(id);
+
+        if (dish == null) {
+            return "redirect:/dishes?error=DishNotFound";
+        }
+
+        model.addAttribute("dish", dish);
+        return "dish-form";
+    }
+
+    // 4.2 Метод за зачувување на ново јадење (POST)
+    @PostMapping("/add")
+    public String saveDish(@RequestParam String dishId,
+                           @RequestParam String name,
+                           @RequestParam String cuisine,
+                           @RequestParam int preparationTime) {
+
+        this.dishService.create(dishId, name, cuisine, preparationTime);
+        return "redirect:/dishes";
+    }
+
+    // 4.3 Метод за ажурирање на јадење (POST)
+    @PostMapping("/edit/{id}")
+    public String editDish(@PathVariable Long id,
+                           @RequestParam String dishId,
+                           @RequestParam String name,
+                           @RequestParam String cuisine,
+                           @RequestParam int preparationTime) {
+
+        this.dishService.update(id, dishId, name, cuisine, preparationTime);
+        return "redirect:/dishes";
+    }
+
+    // 4.4 Метод за бришење на јадење (POST) - ОВА Е МЕТОДОТ КОЈ МОРА ДА СЕ ПРИФАТИ
+    @PostMapping("/delete/{id}")
+    public String deleteDish(@PathVariable Long id) {
+        // Обезбедете дека dishService.delete(id) не фрла исклучок.
+        this.dishService.delete(id);
+        return "redirect:/dishes";
+    }
+
+    // --- ИНТЕГРАЦИЈА СО CHEF ---
+
+    // 8.1 Метод за прикажување на страницата за избор на јадење за готвач
+    @GetMapping("/select")
+    public String selectDishPage(@RequestParam Long chefId, Model model) {
+
+        Chef chef = chefService.findById(chefId);
+
+        if (chef == null) {
+            return "redirect:/listChefs?error=ChefNotFound";
+        }
+
+        model.addAttribute("dishes", dishService.listDishes());
+        model.addAttribute("chefId", chefId);
+        model.addAttribute("chefName", chef.getFirstName() + " " + chef.getLastName());
+
+        return "dishesList";
+    }
+
+    // 8.2 Метод за додавање на избраното јадење кај готвачот
+    @PostMapping("/select")
+    public String addDishToChef(@RequestParam Long chefId,
+                                @RequestParam String dishId) {
+
+        Chef chef = chefService.addDishToChef(chefId, dishId);
+
+        if (chef == null) {
+            return "redirect:/dishes/select?chefId=" + chefId + "&error=DishOrChefNotFound";
+        }
+
+        return "redirect:/chefDetails?chefId=" + chef.getId();
+    }
+}
