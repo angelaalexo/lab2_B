@@ -40,18 +40,11 @@ public class ChefServiceImpl implements ChefService {
             return null; // или фрли исклучок
         }
 
-        // Внимание: Претпоставуваме дека Chef класата има метод getDishes()
-        // кој враќа листа што може да се менува (Mutable List) од Dish објекти.
-
         if (chef.getDishes() != null) {
             chef.getDishes().add(dish);
         } else {
-            // Логика за иницијализација на листата ако е null
-            // (Бара промена во Chef моделот ако е потребно)
         }
 
-        // Бидејќи работиме со in-memory листа, промената е директно направена
-        // на објектот во DataHolder, па само го враќаме готвачот.
         return chef;
     }
 }

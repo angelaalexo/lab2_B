@@ -12,7 +12,6 @@ public class DishServiceImpl implements DishService {
 
     private final DishRepository dishRepository;
 
-    // Dependency Injection преку конструктор
     public DishServiceImpl(DishRepository dishRepository) {
         this.dishRepository = dishRepository;
     }
@@ -44,22 +43,17 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public Dish update(Long id, String dishId, String name, String cuisine, int preparationTime) {
-        // 1. Наоѓање на постоечкото јадење
         Dish dish = dishRepository.findById(id).orElse(null);
 
         if (dish == null) {
-            // Фрлање исклучок или враќање null ако не е пронајдено
             return null;
         }
 
-        // 2. Ажурирање на својствата на постоечкиот објект
-        // (ID-то останува исто)
         dish.setDishId(dishId);
         dish.setName(name);
         dish.setCuisine(cuisine);
         dish.setPreparationTime(preparationTime);
 
-        // 3. Зачувување на ажурираниот објект
         return dishRepository.save(dish);
     }
 

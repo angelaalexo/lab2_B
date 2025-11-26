@@ -11,10 +11,8 @@ public interface ChefRepository {
     Optional<Chef> findById(Long id);
     Chef addDishToChef(Long chefId, String dishId);
 
-    // Додадено: Метод за листање на сите готвачи
     List<Chef> listChefs();
 
-    // Додадено: Методи за CRUD операции (ако се потребни)
     // Chef save(Chef chef);
     // void deleteById(Long id);
 }

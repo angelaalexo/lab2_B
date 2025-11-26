@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/dishes") // <--- База на патеката е /dishes
+@RequestMapping("/dishes")
 public class DishController {
 
     private final DishService dishService;
@@ -22,7 +22,7 @@ public class DishController {
         this.chefService = chefService;
     }
 
-    // 4.1 Метод за листање на јадења
+    // list dishes
     @GetMapping
     public String getDishesPage(@RequestParam(required = false) String error, Model model) {
         if (error != null && !error.isEmpty()) {
@@ -36,14 +36,14 @@ public class DishController {
         return "listDishes";
     }
 
-    // 7.2 Метод за прикажување на празна форма (Додавање)
+    // shows empty form
     @GetMapping("/dish-form")
     public String getAddDishPage(Model model) {
         model.addAttribute("dish", new Dish());
         return "dish-form";
     }
 
-    // 7.1 Метод за прикажување на форма со податоци (Уредување)
+    // shows dish form
     @GetMapping("/dish-form/{id}")
     public String getEditDishForm(@PathVariable Long id, Model model) {
         Dish dish = dishService.findById(id);
@@ -56,7 +56,7 @@ public class DishController {
         return "dish-form";
     }
 
-    // 4.2 Метод за зачувување на ново јадење (POST)
+    // method of saving new dish POST
     @PostMapping("/add")
     public String saveDish(@RequestParam String dishId,
                            @RequestParam String name,
@@ -67,7 +67,7 @@ public class DishController {
         return "redirect:/dishes";
     }
 
-    // 4.3 Метод за ажурирање на јадење (POST)
+    // methot od edit dish POST
     @PostMapping("/edit/{id}")
     public String editDish(@PathVariable Long id,
                            @RequestParam String dishId,
@@ -79,17 +79,13 @@ public class DishController {
         return "redirect:/dishes";
     }
 
-    // 4.4 Метод за бришење на јадење (POST) - ОВА Е МЕТОДОТ КОЈ МОРА ДА СЕ ПРИФАТИ
     @PostMapping("/delete/{id}")
     public String deleteDish(@PathVariable Long id) {
-        // Обезбедете дека dishService.delete(id) не фрла исклучок.
         this.dishService.delete(id);
         return "redirect:/dishes";
     }
 
-    // --- ИНТЕГРАЦИЈА СО CHEF ---
-
-    // 8.1 Метод за прикажување на страницата за избор на јадење за готвач
+    // method that shows the page with selection of dishes
     @GetMapping("/select")
     public String selectDishPage(@RequestParam Long chefId, Model model) {
 
@@ -106,7 +102,7 @@ public class DishController {
         return "dishesList";
     }
 
-    // 8.2 Метод за додавање на избраното јадење кај готвачот
+    // method that adds a dish to the chef
     @PostMapping("/select")
     public String addDishToChef(@RequestParam Long chefId,
                                 @RequestParam String dishId) {

@@ -9,6 +9,5 @@ public interface ChefService {
     Chef findById(Long id);
     Chef addDishToChef(Long chefId, String dishId);
 
-    // Додадено за компатибилност со старата логика
     // List<Chef> findAll();
 }
