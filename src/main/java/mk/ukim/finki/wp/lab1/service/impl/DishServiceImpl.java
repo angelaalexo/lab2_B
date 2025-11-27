@@ -28,16 +28,13 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public Dish findById(Long id) {
-        // Користиме orElse(null) за да го вратиме јадењето или null
         return dishRepository.findById(id).orElse(null);
     }
 
     @Override
     public Dish create(String dishId, String name, String cuisine, int preparationTime) {
-        // Креирање нов Dish објект. ID-то се генерира во конструкторот на Dish.
         Dish dish = new Dish(dishId, name, cuisine, preparationTime);
 
-        // Зачувување на новиот објект во репозиториумот
         return dishRepository.save(dish);
     }
 

@@ -37,7 +37,7 @@ public class ChefServiceImpl implements ChefService {
         Dish dish = dishService.findByDishId(dishId);
 
         if (chef == null || dish == null) {
-            return null; // или фрли исклучок
+            return null;
         }
 
         if (chef.getDishes() != null) {
