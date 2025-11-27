@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public class InMemoryChefRepository implements ChefRepository {
 
-    // ... (постоечките методи findAll, findById, addDishToChef) ...
-
     @Override
     public List<Chef> findAll() {
         return DataHolder.chefs;

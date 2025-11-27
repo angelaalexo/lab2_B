@@ -13,9 +13,9 @@ import java.util.List;
 public class ChefServiceImpl implements ChefService {
 
     private final ChefRepository chefRepository;
-    private final DishService dishService; // Зависност од DishService
+    private final DishService dishService;
 
-    // Constructor Injection
+    // Constructor
     public ChefServiceImpl(ChefRepository chefRepository, DishService dishService) {
         this.chefRepository = chefRepository;
         this.dishService = dishService;
@@ -42,7 +42,6 @@ public class ChefServiceImpl implements ChefService {
 
         if (chef.getDishes() != null) {
             chef.getDishes().add(dish);
-        } else {
         }
 
         return chef;

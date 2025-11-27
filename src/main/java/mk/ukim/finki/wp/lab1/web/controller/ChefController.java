@@ -39,7 +39,7 @@ public class ChefController {
         }
 
         model.addAttribute("chef", chef);
-        // Note: chefDetails.html must access dishes via ${chef.dishes}
+        // chefDetails.html accesses dishes via ${chef.dishes}
 
         return "chefDetails";
     }
