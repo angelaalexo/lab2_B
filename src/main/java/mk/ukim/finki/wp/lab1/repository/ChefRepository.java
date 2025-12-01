@@ -11,6 +11,6 @@ public interface ChefRepository {
     Optional<Chef> findById(Long id);
     Chef addDishToChef(Long chefId, String dishId);
     List<Chef> listChefs();
-
-    // Chef save(Chef chef);
+    Chef save(Chef chef);
+    void deleteById(Long id);
 }

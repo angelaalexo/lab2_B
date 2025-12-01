@@ -46,4 +46,32 @@ public class ChefServiceImpl implements ChefService {
 
         return chef;
     }
+
+    @Override
+    public Chef create(Long id, String firstName, String lastName, String bio) {
+        Chef chef = new Chef(id, firstName, lastName, bio);
+
+        return chefRepository.save(chef);
+    }
+
+    @Override
+    public Chef update(Long id, String firstName, String lastName, String bio) {
+        Chef chef = chefRepository.findById(id).orElse(null);
+
+        if (chef == null) {
+            return null;
+        }
+
+        chef.setId(id);
+        chef.setFirstName(firstName);
+        chef.setLastName(lastName);
+        chef.setBio(bio);
+
+        return chefRepository.save(chef);
+    }
+
+    @Override
+    public void delete(Long id) {
+        chefRepository.deleteById(id);
+    }
 }

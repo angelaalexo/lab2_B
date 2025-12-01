@@ -17,4 +17,11 @@ public class Chef {
     private String lastName;
     private String bio;
     private List<Dish> dishes;
+
+    public Chef(Long id, String firstName, String lastName, String bio) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.bio = bio;
+    }
 }

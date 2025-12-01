@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${(chef != null) ? 'Edit Chef' : 'Add a new Chef'}">Chef Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            width: 300px;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            display: block;
+        }
+        button[type="submit"] {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="${(chef != null) ? 'Edit Chef' : 'Add a New Chef'}"></h1>
+
+<form th:method="post"
+      th:action="${(chef != null && chef.id != null)
+                     ? '/chefs/edit/' + chef.id
+                     : '/chefs/add'}">
+
+    <label>Chef ID:</label>
+    <input type="text" id="id" name="id" th:value="${chef != null ? chef.id : ''}" required>
+
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" th:value="${(chef != null) ? chef.firstName : ''}" required>
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" th:value="${(chef != null) ? chef.lastName : ''}" required>
+
+    <label>Bio:</label>
+    <input type="text" id="bio" name="bio" th:value="${(chef != null) ? chef.bio : ''}" required>
+
+    <button type="submit" th:text="${(chef != null) ? 'Submit' : 'Add'}">Save</button>
+</form>
+
+<p style="margin-top: 20px;"><a href="/chefs">Back to the list</a></p>
+</body>
+</html>
